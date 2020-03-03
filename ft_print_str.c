@@ -12,6 +12,15 @@
 
 #include "ft_printf.h"
 
+static char	*ft_make_pointer(char *s1, char *s2)
+{
+	char	*temp;
+
+	temp = ft_strjoin(s1, s2);
+	free(s2);
+	return temp;
+}
+
 int			print_string(va_list ap, t_tab *tab)
 {
 	char	*str;
@@ -19,15 +28,14 @@ int			print_string(va_list ap, t_tab *tab)
 	if (tab->csp == 's')
 		str = va_arg(ap, char*);
 	else
-		str = ft_itoa_base(va_arg(ap, long long), 16);
+		str = ft_make_pointer("0x", (ft_itoa_base(va_arg(ap, long long), 16)));
 	if (str == NULL)
 	{
 		str = ft_strnew(6);
 		str = "(null)";
 	}
-	if (tab->csp == 'p')
-		str = ft_strjoin("0x", str);
-	str = ft_strndup(str, (tab->precision));
+	if (tab->csp == 's')
+		str = ft_strndup(str, (tab->precision));
 	str = ft_choosepadding(tab, str, 0);
 	ft_putstr(str);
 	free(str);
