@@ -18,7 +18,7 @@ static char	*ft_make_pointer(char *s1, char *s2)
 
 	temp = ft_strjoin(s1, s2);
 	free(s2);
-	return temp;
+	return (temp);
 }
 
 int			print_string(va_list ap, t_tab *tab)
