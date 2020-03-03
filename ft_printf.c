@@ -29,6 +29,7 @@ static void		ft_setflags(t_tab **tab, const char *csp)
 {
 	size_t len;
 
+	(*tab)->flag =0;
 	len = ft_strlen(csp);
 	(*tab)->width = ft_atoi(&csp[ft_strspn(csp, "+-0 #")]);
 	(*tab)->precision = ft_strchr(csp, '.') ?\
@@ -42,13 +43,13 @@ static void		ft_setflags(t_tab **tab, const char *csp)
 	(*tab)->csp = csp[len - 1];
 	if (csp[len - 2] == 'h' && csp[len - 3] == 'h')
 		(*tab)->flag = 1;
-	if (csp[len - 2] == 'h' && csp[len - 3] != 'h')
+	else if (csp[len - 2] == 'h' && csp[len - 3] != 'h')
 		(*tab)->flag = 2;
-	if (csp[len - 2] == 'l' && csp[len - 3] == 'l')
+	else if (csp[len - 2] == 'l' && csp[len - 3] == 'l')
 		(*tab)->flag = 3;
-	if (csp[len - 2] == 'l' && csp[len - 3] != 'l')
+	else if (csp[len - 2] == 'l' && csp[len - 3] != 'l')
 		(*tab)->flag = 4;
-	if (csp[len - 2] == 'L')
+	else if (csp[len - 2] == 'L')
 		(*tab)->flag = 5;
 	if ((*tab)->left_align == 1)
 		(*tab)->zero = ' ';
