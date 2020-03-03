@@ -40,7 +40,6 @@ int					print_char(va_list ap, t_tab *tab);
 int					print_string(va_list ap, t_tab *tab);
 int					print_float(va_list ap, t_tab *tab, size_t negative);
 int					print_base(va_list ap, t_tab *tab);
-int					print_percent(t_tab *tab);
 
 char				*ft_zeropadding(t_tab *tab, char *number, size_t neg);
 char				*ft_emptypadding(t_tab *tab, char *number, size_t neg);
