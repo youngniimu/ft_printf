@@ -59,7 +59,7 @@ int				print_base(va_list ap, t_tab *tab)
 	negative = i < 0 ? 1 : 0;
 	i *= i < 0 ? -1 : 1;
 	nb = ft_itoa_base(i, ft_choose_base(tab));
-	if (tab->precision == 0)
+	if (tab->precision == 0 && nb[0] == '0')
 		nb[0] = '\0';
 	tab->hash *= nb[0] != '0' ? 1 : 0;
 	if (tab->precision > (int)ft_strlen(nb))

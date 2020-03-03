@@ -38,7 +38,8 @@ SRC = 	ft_printf.c \
 		ft_strnew.c \
 		ft_strspn.c \
 		ft_toupper.c \
-		ft_superjoin.c    
+		ft_superjoin.c\
+		ft_strdup.c
 
 LIB = libft
 FLAGS = -Wall -Wextra -Werror
