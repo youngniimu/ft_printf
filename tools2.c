@@ -34,8 +34,6 @@ char				*ft_handle_precision(t_tab *tab, char *nb)
 {
 	char			*pad;
 
-	if (tab->zero == '0' && tab->empty == 1)
-		tab->empty = 0;
 	pad = ft_memset(ft_strnew(tab->precision), '0', tab->precision);
 	ft_memcpy(&pad[tab->precision - (ft_strlen(nb))], nb, ft_strlen(nb));
 	free(nb);

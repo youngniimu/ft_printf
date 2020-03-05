@@ -35,6 +35,5 @@ int			print_string(va_list ap, t_tab *tab)
 		str = ft_strndup(str, (tab->precision));
 	str = ft_choosepadding(tab, str, 0);
 	ft_putstr(str);
-	free(str);
 	return (ft_strlen(str));
 }
