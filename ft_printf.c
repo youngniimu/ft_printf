@@ -12,8 +12,6 @@
 
 #include "ft_printf.h"
 
-
-
 static int		choose_cs(va_list ap, t_tab *tab)
 {
 	if (tab->csp == 'c' || tab->csp == '%')
@@ -27,11 +25,9 @@ static int		choose_cs(va_list ap, t_tab *tab)
 	return (0);
 }
 
-static void		ft_setflags(t_tab **tab, const char *csp)
+static void		ft_setflags(t_tab **tab, const char *csp, size_t len)
 {
-	size_t len;
-
-	(*tab)->flag =0;
+	(*tab)->flag = 0;
 	len = ft_strlen(csp);
 	(*tab)->width = ft_atoi(&csp[ft_strspn(csp, "+-0 #")]);
 	(*tab)->precision = ft_strchr(csp, '.') ?\
@@ -60,12 +56,14 @@ static void		ft_setflags(t_tab **tab, const char *csp)
 static int		ft_parseflags(const char *format, va_list ap)
 {
 	t_tab		*tab;
-	char 		*arg;
+	char		*arg;
 	int			i;
+	size_t		len;
 
+	len = 0;
 	tab = (t_tab*)malloc(sizeof(t_tab));
 	arg = ft_strndup(format, ft_strcspn(format, "cspdiouxXf%") + 1);
-	ft_setflags(&tab, arg);
+	ft_setflags(&tab, arg, len);
 	i = choose_cs(ap, tab);
 	free(arg);
 	free(tab);
@@ -74,7 +72,6 @@ static int		ft_parseflags(const char *format, va_list ap)
 
 static int		ft_checkcsp(const char *s, char *charset)
 {
-	{
 	size_t i;
 	size_t j;
 
@@ -87,7 +84,6 @@ static int		ft_checkcsp(const char *s, char *charset)
 				return (1);
 	}
 	return (0);
-}
 }
 
 int				ft_printf(const char *format, ...)
