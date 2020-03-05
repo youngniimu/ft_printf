@@ -30,10 +30,7 @@ int			print_string(va_list ap, t_tab *tab)
 	else
 		str = ft_make_pointer("0x", (ft_itoa_base(va_arg(ap, long long), 16)));
 	if (str == NULL)
-	{
-		str = ft_strnew(6);
-		str = "(null)";
-	}
+ 		str = "(null)";
 	if (tab->csp == 's')
 		str = ft_strndup(str, (tab->precision));
 	str = ft_choosepadding(tab, str, 0);
