@@ -67,11 +67,21 @@ static int		ft_parseflags(const char *csp, va_list ap)
 	return (i);
 }
 
+static int		ft_form_argument(const char *format, va_list ap)
+{		
+	char		*arg;
+	int			charcount;
+	
+	arg = ft_strndup(format, ft_strcspn(format, "cspdiouxXf%") + 1);
+	charcount = ft_parseflags(arg, ap);
+	free(arg);
+	return (charcount);
+}
+
 int				ft_printf(const char *format, ...)
 {
 	va_list			ap;
 	size_t			charcount;
-	char			*arg;
 
 	charcount = 0;
 	va_start(ap, format);
@@ -85,9 +95,7 @@ int				ft_printf(const char *format, ...)
 		else
 		{
 			format++;
-			arg = ft_strndup(format, ft_strcspn(format, "cspdiouxXf%") + 1);
-			charcount += ft_parseflags(arg, ap);
-			free(arg);
+			charcount += ft_form_argument(&(*format), ap);
 			format += ft_strcspn(&(*format), "cspdiouxXf%");
 		}
 		format++;
