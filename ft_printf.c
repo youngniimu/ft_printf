@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-static int		choose_cs(va_list ap, t_tab *tab)
+static char		*choose_cs(va_list ap, t_tab *tab)
 {
 	if (tab->csp == 'c' || tab->csp == '%')
 		return (print_char(ap, tab));
@@ -53,24 +53,25 @@ static void		ft_setflags(t_tab **tab, const char *csp, size_t len)
 		(*tab)->zero = ' ';
 }
 
-static int		ft_parseflags(const char *format, va_list ap)
+static char		*ft_parseflags(const char *format, va_list ap, int *add)
 {
 	t_tab		*tab;
 	char		*arg;
-	int			i;
+	char		*ret;
 	size_t		len;
 
 	len = 0;
 	tab = (t_tab*)malloc(sizeof(t_tab));
 	arg = ft_strndup(format, ft_strcspn(format, "cspdiouxXf%") + 1);
 	ft_setflags(&tab, arg, len);
-	i = choose_cs(ap, tab);
+	ret = ft_strdup(choose_cs(ap, tab));
 	free(arg);
 	free(tab);
-	return (i);
+	*add = ft_strlen(ret);
+	return (ret);
 }
 
-static int		ft_checkcsp(const char *s, char *charset)
+static int		ft_check(const char *s, char *charset)
 {
 	size_t i;
 	size_t j;
@@ -86,30 +87,57 @@ static int		ft_checkcsp(const char *s, char *charset)
 	return (0);
 }
 
+
+
 int				ft_printf(const char *format, ...)
 {
 	va_list			ap;
-	size_t			charcount;
+	int				i;
+	char			*temp;
+	char			*ret;
+	int				add;
 
-	charcount = 0;
+	add = 0;
+	i = 0;
+	ret = NULL;
 	va_start(ap, format);
-	while (*format != '\0')
+	while (ft_check(&(format[i]), "%"))
 	{
-		if (*format != '%')
+		if (format[i] != '%')
 		{
-			ft_putchar(*format);
-			charcount++;
+			temp = ft_strndup(&(format[i]), ft_strcspn(&(format[i]), "%"));
+			i += ft_strlen(temp);
+			if (ret == NULL)
+				ret = ft_strdup(temp);
+			else
+				ret = ft_strjoin(ret, temp);
 		}
 		else
 		{
-			format++;
-			if (!(ft_checkcsp(format, "cspdiouxXf%")))
-				return (0);
-			charcount += ft_parseflags(&(*format), ap);
-			format += ft_strcspn(&(*format), "cspdiouxXf%");
+			if (!(ft_check(&(format[i + 1]), "cspdiouxXf%")))
+				return(0);
+			if (ret == NULL)
+				ret = ft_strdup(ft_parseflags(&(format[i + 1]), ap, &add));
+			else
+				ret = ft_strjoin(ret, ft_parseflags(&(format[i + 1]), ap , &add));
+			i += add + 2;
 		}
-		format++;
+	}
+	if (!(ft_strcspn(&(format[i]), "%") && format[i] != '\0'))
+	{
+		if (ret == NULL)
+		{
+			ret = ft_strdup(format);
+			i = ft_strlen(ret);
+		}
+		else
+		{
+			temp = ft_strdup(&(format[i]));
+			i += ft_strlen(temp);
+			ret = ft_strjoin(ret, temp);
+		}
 	}
 	va_end(ap);
-	return (charcount);
+	write(1, ret, i);
+	return (ft_strlen(ret));
 }

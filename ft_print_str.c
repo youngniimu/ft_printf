@@ -21,7 +21,7 @@ static char	*ft_make_pointer(char *s1, char *s2)
 	return (temp);
 }
 
-int			print_string(va_list ap, t_tab *tab)
+char			*print_string(va_list ap, t_tab *tab)
 {
 	char	*str;
 
@@ -35,6 +35,5 @@ int			print_string(va_list ap, t_tab *tab)
 	if (tab->csp == 's')
 		str = ft_strndup(str, (tab->precision));
 	str = ft_choosepadding(tab, str, 0);
-	ft_putstr(str);
-	return (ft_strlen(str));
+	return (str);
 }

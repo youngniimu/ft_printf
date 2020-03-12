@@ -17,6 +17,14 @@
 # include <string.h>
 # include "libft.h"
 
+
+
+#include <stdio.h>
+
+
+
+
+
 /*
 ** flag [1=hh/char] [2=h/short] [3=ll/long long] [4=l/long] [5=L/long double]
 */
@@ -36,10 +44,10 @@ typedef struct		s_tab
 }					t_tab;
 
 int					ft_printf(const char *str, ...);
-int					print_char(va_list ap, t_tab *tab);
-int					print_string(va_list ap, t_tab *tab);
-int					print_float(va_list ap, t_tab *tab, size_t negative);
-int					print_base(va_list ap, t_tab *tab);
+char					*print_char(va_list ap, t_tab *tab);
+char					*print_string(va_list ap, t_tab *tab);
+char					*print_float(va_list ap, t_tab *tab, size_t negative);
+char					*print_base(va_list ap, t_tab *tab);
 
 char				*ft_zeropadding(t_tab *tab, char *number, size_t neg);
 char				*ft_emptypadding(t_tab *tab, char *number, size_t neg);

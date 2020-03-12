@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-int		print_char(va_list ap, t_tab *tab)
+char		*print_char(va_list ap, t_tab *tab)
 {
 	char	*ret;
 	char	c;
@@ -21,22 +21,13 @@ int		print_char(va_list ap, t_tab *tab)
 		c = va_arg(ap, int);
 	else
 		c = '%';
+	if (tab->width)
 	if (tab->width == 0)
-	{
-		write(1, &c, 1);
-		return (1);
-	}
-	ret = ft_memset(ft_strnew(tab->width - 1), tab->zero, tab->width - 1);
+		return (ft_memset(ft_strnew(1), c, 1));
+	ret = ft_memset(ft_strnew(tab->width), tab->zero, tab->width);
 	if (tab->left_align == 0)
-	{
-		write(1, ret, tab->width - 1);
-		write(1, &c, 1);
-	}
+		ret = ft_memset(&ret[tab->width - 1], c, 1);
 	else
-	{
-		write(1, &c, 1);
-		write(1, ret, tab->width - 1);
-	}
-	free(ret);
-	return (tab->width);
+		ret = ft_memset(ret, c, 1);
+	return (ret);
 }

@@ -12,12 +12,6 @@
 
 #include "ft_printf.h"
 
-static int		ft_print_min(void)
-{
-	ft_putstr("-9223372036854775808");
-	return (20);
-}
-
 static int		ft_choose_base(t_tab *tab)
 {
 	if (tab->csp == 'o')
@@ -45,7 +39,7 @@ static char		*ft_capital(char *nb)
 	return (nb);
 }
 
-int				print_base(va_list ap, t_tab *tab)
+char				*print_base(va_list ap, t_tab *tab)
 {
 	char		*nb;
 	long long	i;
@@ -55,7 +49,7 @@ int				print_base(va_list ap, t_tab *tab)
 		tab->hash += tab->hash == 1 ? 1 : 0;
 	i = ft_select_type(ap, tab);
 	if (i == -9223372036854775807 - 1)
-		return (ft_print_min());
+		return ("-9223372036854775808");
 	negative = i < 0 ? 1 : 0;
 	i *= i < 0 ? -1 : 1;
 	nb = ft_itoa_base(i, ft_choose_base(tab));
@@ -69,7 +63,5 @@ int				print_base(va_list ap, t_tab *tab)
 	nb = ft_choosepadding(tab, nb, negative);
 	if (tab->csp == 'X')
 		nb = ft_capital(nb);
-	ft_putstr(nb);
-	free(nb);
-	return (ft_strlen(nb));
+	return (nb);
 }

@@ -66,7 +66,7 @@ static char		*ft_float_hash(t_tab *tab, char *nb)
 	return (nb);
 }
 
-int				print_float(va_list ap, t_tab *tab, size_t negative)
+char				*print_float(va_list ap, t_tab *tab, size_t negative)
 {
 	long		integer;
 	long double	double_nb;
@@ -89,7 +89,5 @@ int				print_float(va_list ap, t_tab *tab, size_t negative)
 	else
 		nb = ft_float_hash(tab, ft_itoa_base(integer, 10));
 	nb = ft_choosepadding(tab, nb, negative);
-	ft_putstr(nb);
-	free(nb);
-	return (ft_strlen(nb));
+	return (nb);
 }
