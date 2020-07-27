@@ -29,8 +29,25 @@
 ** flag [1=hh/char] [2=h/short] [3=ll/long long] [4=l/long] [5=L/long double]
 */
 
+
+typedef struct		s_ptr
+{
+	char 			*format;
+	char 			*output;
+	va_list 		ap;
+
+	size_t			i;
+	size_t			j;
+
+	size_t			output_len;
+	size_t			add_len;
+}					t_ptr;
+
+
+
 typedef struct		s_tab
 {
+
 	int				precision;
 	size_t			width;
 	size_t			plus;
@@ -43,11 +60,13 @@ typedef struct		s_tab
 	int				roundup;
 }					t_tab;
 
+
+
 int					ft_printf(const char *str, ...);
-char					*print_char(va_list ap, t_tab *tab);
-char					*print_string(va_list ap, t_tab *tab);
-char					*print_float(va_list ap, t_tab *tab, size_t negative);
-char					*print_base(va_list ap, t_tab *tab);
+char				*print_char(va_list ap, t_tab *tab);
+char				*print_string(va_list ap, t_tab *tab);
+char				*print_float(va_list ap, t_tab *tab, size_t negative);
+char				*print_base(va_list ap, t_tab *tab);
 
 char				*ft_zeropadding(t_tab *tab, char *number, size_t neg);
 char				*ft_emptypadding(t_tab *tab, char *number, size_t neg);
