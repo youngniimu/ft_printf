@@ -11,58 +11,39 @@
 #******************************************************************************#
 
 NAME = libftprintf.a
-
-SRCS = srcs/
-
-SRC = 	ft_printf.c \
-		ft_print_char.c \
-		ft_print_str.c \
-		ft_print_float.c \
-		tools.c \
-		tools2.c \
-		ft_print_base.c \
-		\
-		ft_atoi.c \
-		ft_itoa_base.c \
-		ft_memcpy.c \
-		ft_memset.c \
-		ft_putchar.c \
-		ft_putstr.c \
-		ft_strchr.c \
-		ft_strcpy.c \
-		ft_strcspn.c \
-		ft_strjoin.c \
-		ft_strlen.c \
-		ft_strnchr.c \
-		ft_strndup.c \
-		ft_strnew.c \
-		ft_strspn.c \
-		ft_toupper.c \
-		ft_superjoin.c\
-		ft_strdup.c
-
-LIB = libft
+SRC_DIR = src/
+SRC_FILES = 	\
+			ft_set_flags.c \
+			ft_parse_format.c \
+			ft_printf.c \
+			ft_print_char.c \
+			ft_print_str.c \
+			ft_print_float.c \
+			tools.c \
+			tools2.c \
+			ft_print_base.c
+INCLUDES = include/
+SOURCES = $(addprefix $(SRC_DIR), $(SRC_FILES))
+LIB = libft/
 FLAGS = -Wall -Wextra -Werror
-OBJECTS = $(SRC:.c=.o)
-
+OBJECTS = $(SRC_FILES:.c=.o)
 
 all: $(NAME)
-
 $(NAME):
-	@gcc -c $(FLAGS) $(SRC) 
-	@ar cr $(NAME) $(OBJECTS)
-	@ranlib $(NAME)
-
+			@make -C $(LIB)
+			@cp $(LIB)/libft.a ./$(NAME)
+			@gcc $(FLAGS) -c $(SOURCES) 
+			@ar rc $(NAME) $(OBJECTS)
+			@ranlib $(NAME)
 clean:
-	@rm -f $(OBJECTS)
-
+			@rm -f $(OBJECTS)
+			@make -C $(LIB) clean
 fclean: clean
-	@rm -f $(NAME)
-
+			@rm -f $(NAME)
+			@make -C $(LIB) fclean
 re: fclean all
 
 cleandup:
-	@find . -type f -name '*~' -exec rm -rf {} \;
-
+			@find . -type f -name '*~' -exec rm -rf {} \;
 norme:
-	@norminette $(SRC)
+			@norminette $(SRC)

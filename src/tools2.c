@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../include/ft_printf.h"
 
 long long			ft_select_type_signed(va_list ap, t_tab *tab)
 {
@@ -32,19 +32,19 @@ long long			ft_select_type_signed(va_list ap, t_tab *tab)
 
 unsigned long long	ft_select_type_unsigned(va_list ap, t_tab *tab)
 {
-	intmax_t		n;
+	uintmax_t		n;
 
 	n = 0;
 	if (tab->flag == 1)
-		n = (unsigned char)va_arg(ap, intmax_t);
+		n = (unsigned char)va_arg(ap, uintmax_t);
 	else if (tab->flag == 2)
-		n = (unsigned short int)va_arg(ap, intmax_t);
+		n = (unsigned short int)va_arg(ap, uintmax_t);
 	else if (tab->flag == 3)
-		n = (unsigned long long int)va_arg(ap, intmax_t);
+		n = (unsigned long long int)va_arg(ap, uintmax_t);
 	else if (tab->flag == 4)
-		n = (unsigned long int)va_arg(ap, intmax_t);
+		n = (unsigned long int)va_arg(ap, uintmax_t);
 	else
-		n = (unsigned int)va_arg(ap, intmax_t);
+		n = (unsigned int)va_arg(ap, uintmax_t);
 	return (n);
 }
 
@@ -53,19 +53,19 @@ static char			*ft_sign(char *sign, char *str)
 	char			*ret;
 
 	ret = ft_strjoin(sign, str);
-	free(str);
+	ft_strdel(&str);
 	str = ft_strndup(ret, ft_strlen(ret));
-	free(ret);
+	ft_strdel(&ret);
 	return (str);
 }
 
-char				*ft_addpme(char *str, t_tab *tab, size_t neg)
+char				*ft_addsign(char *str, t_tab *tab)
 {
-	if (tab->plus == 1 && neg == 0 && tab->csp != 'u')
+	if (tab->plus == 1 && !tab->negative && tab->csp != 'u')
 		str = ft_sign("+", str);
-	if (tab->empty == 1 && neg == 0 && tab->plus == 0 && tab->csp != 'u')
+	if (tab->empty == 1 && !tab->negative && !tab->plus && tab->csp != 'u')
 		str = ft_sign(" ", str);
-	if (neg == 1 && str[0] != '-')
+	if (tab->negative && str[0] != '-')
 		str = ft_sign("-", str);
 	if (tab->hash == 1 && tab->csp != 'f' && str[0] != '0')
 		str = ft_sign("0", str);

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../include/ft_printf.h"
 
 char		*ft_handle_precision(t_tab *tab, char *nb)
 {
@@ -18,54 +18,59 @@ char		*ft_handle_precision(t_tab *tab, char *nb)
 
 	pad = ft_memset(ft_strnew(tab->precision), '0', tab->precision);
 	ft_memcpy(&pad[tab->precision - (ft_strlen(nb))], nb, ft_strlen(nb));
-	free(nb);
+	ft_strdel(&nb);
 	return (pad);
 }
 
-char		*ft_choosepadding(t_tab *tab, char *nb, size_t neg)
+char		*ft_choosepadding(t_tab *tab, char *nb)
 {
 	if (ft_strlen(nb) < tab->width)
 	{
-		if (tab->zero == '0')
-			nb = ft_zeropadding(tab, nb, neg);
-		else
-			nb = ft_emptypadding(tab, nb, neg);
+		return (tab->padding_type == '0'
+				? ft_zeropadding(tab, nb)
+				: ft_emptypadding(tab, nb));
 	}
 	else
-		nb = ft_addpme(nb, tab, neg);
-	return (nb);
+		return (ft_addsign(nb, tab));
 }
 
-char		*ft_emptypadding(t_tab *tab, char *nb, size_t neg)
+static int	ft_adjust_width(t_tab *tab)
 {
-	char	*pad;
-
-	if (nb[0] != '-')
-		nb = ft_addpme(nb, tab, neg);
-	pad = ft_memset(ft_strnew(tab->width), ' ', tab->width);
-	if (tab->left_align == 0)
-		ft_memcpy(&pad[tab->width - (ft_strlen(nb))], nb, ft_strlen(nb));
-	else
-		ft_memcpy(pad, nb, (ft_strlen(nb)));
-	free(nb);
-	return (pad);
+	tab->empty *= tab->plus ? FALSE : TRUE;
+	tab->empty *= tab->negative ? FALSE : TRUE;
+	tab->plus *= tab->negative ? FALSE : TRUE;
+	return (tab->width - tab->plus - tab->empty - tab->negative - tab->hash);
 }
 
-char		*ft_zeropadding(t_tab *tab, char *nb, size_t neg)
+char		*ft_zeropadding(t_tab *tab, char *nb)
 {
 	char	*pad;
 	size_t	padlen;
 
-	padlen = 0;
-	tab->empty *= tab->plus == 1 ? 0 : 1;
-	tab->plus *= neg == 1 ? 0 : 1;
-	padlen = tab->width - tab->plus - tab->empty - neg - tab->hash;
+	if (tab->csp == 'o' && tab->hash && tab->width >= ft_strlen(nb))
+		tab->hash = 0;
+	padlen = ft_adjust_width(tab);
 	pad = ft_memset(ft_strnew(padlen), '0', padlen);
-	if (tab->left_align == 0)
+	if (!tab->left_align)
 		ft_memcpy(&pad[padlen - (ft_strlen(nb))], nb, ft_strlen(nb));
 	else
 		ft_memcpy(pad, nb, (ft_strlen(nb)));
-	pad = ft_addpme(pad, tab, neg);
-	free(nb);
+	pad = ft_addsign(pad, tab);
+	ft_strdel(&nb);
+	return (pad);
+}
+
+char		*ft_emptypadding(t_tab *tab, char *nb)
+{
+	char	*pad;
+
+	if (nb[0] != '-')
+		nb = ft_addsign(nb, tab);
+	pad = ft_memset(ft_strnew(tab->width), ' ', tab->width);
+	if (!tab->left_align)
+		ft_memcpy(&pad[tab->width - (ft_strlen(nb))], nb, ft_strlen(nb));
+	else
+		ft_memcpy(pad, nb, (ft_strlen(nb)));
+	ft_strdel(&nb);
 	return (pad);
 }
